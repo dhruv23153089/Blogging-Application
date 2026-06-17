@@ -2,7 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+const rawApiUrl = import.meta.env.VITE_API_URL || '/api';
+const API_URL = rawApiUrl === '/api'
+  ? rawApiUrl
+  : `${rawApiUrl.replace(/\/$/, '')}${rawApiUrl.replace(/\/$/, '').endsWith('/api') ? '' : '/api'}`;
 const emptyPost = {
   title: '',
   excerpt: '',
@@ -33,7 +36,7 @@ async function request(path, options = {}, token = '') {
       }
     });
   } catch {
-    throw new Error('Backend API is not reachable. Start the backend with npm run dev:backend.');
+    throw new Error('Backend API is not reachable. Check Vercel VITE_API_URL and Render CLIENT_ORIGIN settings.');
   }
 
   const data = await response.json().catch(() => ({}));

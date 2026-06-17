@@ -40,6 +40,14 @@ app.use(
   })
 );
 
+app.get('/', (req, res) => {
+  res.json({
+    service: 'Inkline Blogging Platform API',
+    status: 'running',
+    health: '/api/health'
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'blogging-platform-api' });
 });
